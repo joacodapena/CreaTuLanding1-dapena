@@ -1,3 +1,4 @@
+// No se usa mas, lo dejo como guía
 const products = [
   {
     id: '1',

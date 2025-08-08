@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getProducts, getProductsByCategory } from '../data/products';
+import { fetchProducts } from "../services/firebaseProducts";
 import ItemList from './ItemList';
 
 const ItemListContainer = ({ mensaje }) => {
@@ -10,13 +10,10 @@ const ItemListContainer = ({ mensaje }) => {
 
   useEffect(() => {
     setLoading(true);
-    const fetchProducts = categoryId ? getProductsByCategory : getProducts;
-
-    fetchProducts(categoryId)
-      .then(data => {
-        setItems(data);
-        setLoading(false);
-      });
+    fetchProducts(categoryId).then((data) => {
+      setItems(data);
+      setLoading(false);
+    });
   }, [categoryId]);
 
   return (

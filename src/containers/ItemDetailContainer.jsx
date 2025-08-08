@@ -1,32 +1,28 @@
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { fetchProductById } from "../services/firebaseProducts";
+import ItemDetail from "../components/ItemDetail";
 
 function ItemDetailContainer() {
   const { itemId } = useParams();
   const [item, setItem] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchItem = () => {
-      setTimeout(() => {
-        setItem({ id: itemId, name: "Producto " + itemId, description: "Descripción simulada" });
-      }, 1000);
-    };
-
-    fetchItem();
+      console.log("Buscando producto con id:", itemId);
+    setLoading(true);
+    fetchProductById(itemId).then((product) => {
+          console.log("Producto encontrado:", product);
+      setItem(product);
+      setLoading(false);
+    });
   }, [itemId]);
 
-  return (
-    <div>
-      {item ? (
-        <>
-          <h2>{item.name}</h2>
-          <p>{item.description}</p>
-        </>
-      ) : (
-        <p>Cargando producto...</p>
-      )}
-    </div>
-  );
+  if (loading) return <p>Cargando producto...</p>;
+
+  if (!item) return <p>Producto no encontrado.</p>;
+
+  return <ItemDetail item={item} />;
 }
 
 export default ItemDetailContainer;
